@@ -1,4 +1,6 @@
 <script lang="ts">
+  import LineChart from './components/LineChart.svelte'
+
   const TAX: number = 20.315 // 税金
   const TAX_COEFFICIENT = (100 - TAX) / 100 // 税金係数
   const DIGIT: number = 10000 // 万円表示用の係数
@@ -20,6 +22,13 @@
   $: three_interest = Math.floor(_purchase_price * _interest ** 3)
   $: five_interest = Math.floor(_purchase_price * _interest ** 5)
   $: ten_interest = Math.floor(_purchase_price * _interest ** 10)
+
+  $: data = {
+    single: single_interest,
+    three: three_interest,
+    five: five_interest,
+    ten: ten_interest
+  }
 </script>
 
 <main>
@@ -72,6 +81,7 @@
     </dl>
   </article>
 </main>
+<LineChart {...data} />
 
 <style lang="css">
   * {
@@ -90,6 +100,7 @@
   }
   main {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     width: 100%;
   }
