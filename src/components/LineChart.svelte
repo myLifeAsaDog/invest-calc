@@ -6,6 +6,7 @@
     PointElement,
     CategoryScale,
     LinearScale,
+    Tooltip,
   } from 'chart.js'
   import { onMount } from 'svelte'
 
@@ -16,7 +17,7 @@
   let props: Props = $props()
 
   let chartData = $derived({
-    labels: ['1', '3', '5', '10'],
+    labels: ['1年目', '3年目', '5年目', '10年目'],
     datasets: [
       {
         label: '想定利回り',
@@ -31,12 +32,13 @@
     LineElement,
     PointElement,
     CategoryScale,
-    LinearScale
+    LinearScale,
+    Tooltip
   )
   Chart.defaults.color = '#f1f1f1'
-  
+
   let chartCanvas: HTMLCanvasElement
-  let LineChart: Chart|null = $state(null)
+  let LineChart: Chart | null = $state(null)
 
   $effect(() => {
     if (!LineChart) return
