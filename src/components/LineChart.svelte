@@ -13,19 +13,19 @@
     [key: string]: number
   }
 
-  let { single, three, five, ten }: Props = $props()
+  let props: Props = $props()
 
-  const chartData = {
+  let chartData = $derived({
     labels: ['1', '3', '5', '10'],
     datasets: [
       {
-        label: 'Sample',
+        label: '想定利回り',
         backgroundColor: '#f1f1f1',
         borderColor: 'rgb(255, 99, 132)',
-        data: [single, three, five, ten],
+        data: [props.single, props.three, props.five, props.ten],
       },
     ],
-  }
+  })
   Chart.register(
     LineController,
     LineElement,
@@ -34,16 +34,22 @@
     LinearScale
   )
   Chart.defaults.color = '#f1f1f1'
+  
   let chartCanvas: HTMLCanvasElement
-  const renderChart = () => {
-    const chart = new Chart(chartCanvas, {
+  let LineChart: Chart|null = $state(null)
+
+  $effect(() => {
+    if (!LineChart) return
+    LineChart.data.datasets[0].data = chartData.datasets[0].data
+    LineChart.update()
+  })
+
+  onMount(() => {
+    LineChart = new Chart(chartCanvas, {
       type: 'line',
       data: chartData,
       options: {},
     })
-  }
-  onMount(() => {
-    renderChart()
   })
 </script>
 
