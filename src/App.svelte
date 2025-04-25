@@ -5,36 +5,35 @@
   const TAX_COEFFICIENT = (100 - TAX) / 100 // 税金係数
   const DIGIT: number = 10000 // 万円表示用の係数
 
-  let purchase_price: number = 100 // 購入金額
-  let base_price: number = 10000 // 購入時基準価格
-  let distribution: number = 100 // 分配金
-  let found_fee: number = 0.0938 // 信託手数料
-  let interest: number = 5.3 // 年利回り
+  let purchase_price: number = $state(100) // 購入金額
+  let base_price: number = $state(10000) // 購入時基準価格
+  let distribution: number = $state(100) // 分配金
+  let found_fee: number = $state(0.0938) // 信託手数料
+  let interest: number = $state(5.3) // 年利回り
 
-  $: _purchase_price = purchase_price * DIGIT
-  $: _interest = interest / 100 + 1
+  let _purchase_price = $derived(purchase_price * DIGIT)
+  let _interest = $derived(interest / 100 + 1)
 
-  $: dependents = Math.ceil((_purchase_price / base_price) * 10000)
-  $: found_cost = Math.floor(_purchase_price * (found_fee / 100))
-  $: result = Math.floor((dependents * distribution) / 10000)
-  $: afterTax = Math.floor(result * TAX_COEFFICIENT)
-  $: single_interest = Math.floor(_purchase_price * _interest)
-  $: three_interest = Math.floor(_purchase_price * _interest ** 3)
-  $: five_interest = Math.floor(_purchase_price * _interest ** 5)
-  $: ten_interest = Math.floor(_purchase_price * _interest ** 10)
+  let dependents = $derived(Math.ceil((_purchase_price / base_price) * 10000))
+  let found_cost = $derived(Math.floor(_purchase_price * (found_fee / 100)))
+  let result = $derived(Math.floor((dependents * distribution) / 10000))
+  let afterTax = $derived(Math.floor(result * TAX_COEFFICIENT))
+  let single_interest = $derived(Math.floor(_purchase_price * _interest))
+  let three_interest = $derived(Math.floor(_purchase_price * _interest ** 3))
+  let five_interest = $derived(Math.floor(_purchase_price * _interest ** 5))
+  let ten_interest = $derived(Math.floor(_purchase_price * _interest ** 10))
 
-  $: data = {
+  let data = $derived({
     single: single_interest,
     three: three_interest,
     five: five_interest,
     ten: ten_interest
-  }
+  })
 </script>
 
 <main>
   <article>
     <h1>投資信託分配金</h1>
-    <!-- svelte-ignore a11y-label-has-associated-control -->
     <dl>
       <dt>購入金額</dt>
       <dd>
